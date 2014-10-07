@@ -66,4 +66,12 @@ task :new_skeleton, [:gist_description] do |t, args|
     puts "\nYour blo.ck:\n\n\thttp://bl.ocks.org/mnem/#{gist_id}\n"
 end
 
+desc "Serves this directory locally as a web site"
+task :serve do
+    fail 'Please install NodeJS: http://nodejs.org' unless find_executable 'node'
+    fail 'Please install http-server for NodeJS: npm install --global http-server' unless find_executable 'http-server'
+
+    sh "http-server"
+end
+
 task :default, [:gist_description] => :new_skeleton
