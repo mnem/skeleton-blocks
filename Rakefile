@@ -9,8 +9,8 @@ end
 
 require 'rake/clean'
 
-ROOT = '.new-skeleton'
-CLEAN.include ROOT
+TEMP_FOLDER = '.new-skeleton'
+CLEAN.include TEMP_FOLDER
 
 def create_thumbnail
     sh "curl -so thumbnail.png http://placekitten.com/g/230/120"
@@ -41,15 +41,15 @@ desc 'Creates a new skeleton suitable for bl.ocks and pushes it to github as a g
 task :new_skeleton, [:gist_description] do |t, args|
     args.with_defaults(:gist_description => 'Untitled Thing')
 
-    # fail "Move or delete the existing #{ROOT} folder" if File.exists? ROOT
+    # fail "Move or delete the existing #{TEMP_FOLDER} folder" if File.exists? TEMP_FOLDER
     fail 'Please install curl: http://curl.haxx.se' unless find_executable 'curl'
     fail 'Please install git: http://git-scm.com' unless find_executable 'git'
     fail 'Please install NodeJS: http://nodejs.org' unless find_executable 'node'
     fail 'Please install gistup for NodeJS: npm install --global gistup' unless find_executable 'gistup'
 
     gist_id = nil
-    mkdir_p ROOT
-    cd ROOT do
+    mkdir_p TEMP_FOLDER
+    cd TEMP_FOLDER do
         create_thumbnail
         create_html
         create_readme
@@ -61,9 +61,9 @@ task :new_skeleton, [:gist_description] do |t, args|
 
     BLOCKS = File.join 'mnem', 'raw'
     mkdir_p BLOCKS
-    mv ROOT, File.join(BLOCKS, gist_id)
+    mv TEMP_FOLDER, File.join(BLOCKS, gist_id)
 
-    puts "Your blo.ck: http://bl.ocks.org/mnem/#{gist_id}"
+    puts "\nYour blo.ck:\n\n\thttp://bl.ocks.org/mnem/#{gist_id}\n"
 end
 
 task :default, [:gist_description] => :new_skeleton
